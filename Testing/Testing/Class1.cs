@@ -9,24 +9,9 @@ using OpenQA.Selenium.Firefox;
 
 namespace Testing
 {
-    public class Calculator
-    {
-        [TestCase(2, 2, 4)]
-        public void testaddition(int one, int two, int expected)
-        {
-            int testsum = addition(one, two);
-            Assert.AreEqual(expected, testsum, "failed");
-        }
-        public int addition(int a, int b)
-        {
-            int sum = 0;
-            sum = a + b;
 
-            return sum;
 
-        }
-
-    }
+    
     public class Browsertest
     {
         IWebDriver driver;
