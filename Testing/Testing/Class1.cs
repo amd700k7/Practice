@@ -38,8 +38,8 @@ namespace Testing
 
             //When
             driver.FindElement(By.Name("q")).Clear();   //locate search box element and clear it of any text
-//            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
-            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
+            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
+//            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
 
             driver.FindElement(By.Name("btnG")).Click();    //locate search button element and click it
 
@@ -47,7 +47,7 @@ namespace Testing
             System.Threading.Thread.Sleep(5000);         //delay for 5000ms to visually verify page results; also to allow for page to load
             Assert.IsTrue(ClassElementDisplayed("g", driver), "CLASS results not found"); //Test to verify results were found
 
-            nextpage = driver.FindElement(By.Id("pnnext")).Displayed;
+			nextpage = IdElementDisplayed( "pnnext", driver);//driver.FindElement(By.Id("pnnext")).Displayed;
 
             if (nextpage == true)       //are more results found?
             {
@@ -71,7 +71,7 @@ namespace Testing
                 Console.Write(pagenumber);              //print to console
                 Console.WriteLine(" has been displayed");              //print to console
             }
-            Assert.IsTrue(ClassElementDisplayed("pn", driver), "ID results not found");   //test to verify 'next' button found
+            Assert.IsTrue(ClassElementDisplayed("g", driver), "Search results not found");   //test to verify 'next' button found
                 
         }
 
