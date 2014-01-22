@@ -38,8 +38,8 @@ namespace Testing
 
             //When
             driver.FindElement(By.Name("q")).Clear();   //locate search box element and clear it of any text
-            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
-//            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
+//            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
+            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
 
             driver.FindElement(By.Name("btnG")).Click();    //locate search button element and click it
 
