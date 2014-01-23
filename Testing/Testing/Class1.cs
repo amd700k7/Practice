@@ -38,8 +38,8 @@ namespace Testing
 
             //When
             driver.FindElement(By.Name("q")).Clear();   //locate search box element and clear it of any text
-            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
-//            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
+//            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
+            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
 
             driver.FindElement(By.Name("btnG")).Click();    //locate search button element and click it
 
@@ -53,11 +53,15 @@ namespace Testing
             {
                 do//if more results are found
                 {
-
-                    Console.Write("Page ");              //print to console
-                    Console.Write(pagenumber);              //print current page count to console
-                    Console.WriteLine(" has been displayed");              //print to console
-
+					Console.WriteLine( "\nPage " + pagenumber + " has been displayed" );  //print current page count to console starting with a new line.
+					
+					IReadOnlyCollection<IWebElement> resultTitles = driver.FindElements( By.ClassName( "g" ) );
+					int resultIndex = 1;
+					foreach( IWebElement result in resultTitles )
+					{
+						Console.WriteLine( resultIndex + ": " + GetResultTitle( result, driver ) );
+						resultIndex++;
+					}
 
                     GoNext(driver);     //go to the next page
                     pages--;            //decrease number of pages to search through
@@ -67,9 +71,7 @@ namespace Testing
             }
             else if (nextpage == false) //if no results found
             {
-                Console.Write("Page ");              //print to console
-                Console.Write(pagenumber);              //print to console
-                Console.WriteLine(" has been displayed");              //print to console
+				Console.WriteLine( "\nPage " + pagenumber + " has been displayed" );  //print current page count to console starting with a new line.
             }
             Assert.IsTrue(ClassElementDisplayed("g", driver), "Search results not found");   //test to verify 'next' button found
                 
@@ -109,8 +111,13 @@ namespace Testing
         public void GoNext(IWebDriver driver)           //method to tell Google to go to the next page of search elements
         {
             driver.FindElement(By.Id("pnnext")).Click();    //click the next button
-            System.Threading.Thread.Sleep(5000);         //delay for 5000ms to visually verify page results; also to allow for page to load
+            System.Threading.Thread.Sleep(2500);         //delay for 5000ms to visually verify page results; also to allow for page to load
         }
+
+		public string GetResultTitle(IWebElement currentResult, IWebDriver driver)
+		{
+			return currentResult.FindElement( By.TagName( "a" ) ).Text;
+		}
         
     }
 }
