@@ -24,10 +24,10 @@ namespace Testing
             driver.Dispose();   //kill the firefox browser
         }
 
-        [Test]                  //mark following method for testing
-        public void simplesearch()  //create method to perform a google search
+		[TestCase( "abcasdfewawef" )] //locate search box element and insert a string (1 page sample)
+		[TestCase( "dominion" )] //locate search box element and insert a string (multi page sample)
+        public void simplesearch(string searchQuery)  //create method to perform a google search
         {
-            string samplestring = "sample";
             int pages = 3;                      //max number of pages to search
             int pagenumber = 1;                 //track number of pages searched
             bool nextpage = false;              //to simplify displayed results
@@ -38,8 +38,7 @@ namespace Testing
 
             //When
             driver.FindElement(By.Name("q")).Clear();   //locate search box element and clear it of any text
-//            driver.FindElement(By.Name("q")).SendKeys("abcasdfewawef");    //locate search box element and insert a string (1 page sample)
-            driver.FindElement(By.Name("q")).SendKeys("dominion");    //locate search box element and insert a string (multi page sample)
+			driver.FindElement( By.Name( "q" ) ).SendKeys( searchQuery );    //locate search box element and insert a string
 
             driver.FindElement(By.Name("btnG")).Click();    //locate search button element and click it
 
@@ -54,7 +53,8 @@ namespace Testing
                 do//if more results are found
                 {
 					Console.WriteLine( "\nPage " + pagenumber + " has been displayed" );  //print current page count to console starting with a new line.
-					
+
+					//Display the Page Titles
 					IReadOnlyCollection<IWebElement> resultTitles = driver.FindElements( By.ClassName( "g" ) );
 					int resultIndex = 1;
 					foreach( IWebElement result in resultTitles )
@@ -72,9 +72,17 @@ namespace Testing
             else if (nextpage == false) //if no results found
             {
 				Console.WriteLine( "\nPage " + pagenumber + " has been displayed" );  //print current page count to console starting with a new line.
+
+				//Display the Page Titles
+				IReadOnlyCollection<IWebElement> resultTitles = driver.FindElements( By.ClassName( "g" ) );
+				int resultIndex = 1;
+				foreach( IWebElement result in resultTitles )
+				{
+					Console.WriteLine( resultIndex + ": " + GetResultTitle( result, driver ) );
+					resultIndex++;
+				}
             }
-            Assert.IsTrue(ClassElementDisplayed("g", driver), "Search results not found");   //test to verify 'next' button found
-                
+            Assert.IsTrue(ClassElementDisplayed("g", driver), "Search results not found");   //test to verify one result card is found
         }
 
         public bool ClassElementDisplayed(string classname, IWebDriver driver)  //method to check the class element we searched for
