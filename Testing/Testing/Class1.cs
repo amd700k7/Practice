@@ -27,7 +27,6 @@ namespace Testing
         [Test]                  //mark following method for testing
         public void simplesearch()  //create method to perform a google search
         {
-            string samplestring = "sample";
             int pages = 3;                      //max number of pages to search
             int pagenumber = 1;                 //track number of pages searched
             bool nextpage = false;              //to simplify displayed results
@@ -44,34 +43,31 @@ namespace Testing
             driver.FindElement(By.Name("btnG")).Click();    //locate search button element and click it
 
             //Then
+            DisplayPage(pagenumber);    //display page number
+            pagenumber++;       //increases searched page count
             System.Threading.Thread.Sleep(5000);         //delay for 5000ms to visually verify page results; also to allow for page to load
             Assert.IsTrue(ClassElementDisplayed("g", driver), "CLASS results not found"); //Test to verify results were found
 
-            nextpage = driver.FindElement(By.Id("pnnext")).Displayed;
+            nextpage = IdElementDisplayed("pnnext",driver);
 
             if (nextpage == true)       //are more results found?
             {
                 do//if more results are found
                 {
 
-                    Console.Write("Page ");              //print to console
-                    Console.Write(pagenumber);              //print current page count to console
-                    Console.WriteLine(" has been displayed");              //print to console
-
-
-                    GoNext(driver);     //go to the next page
+                    GoNext(driver, pagenumber);     //go to the next page
+                 
                     pages--;            //decrease number of pages to search through
                     pagenumber++;       //increases searched page count
 
-                } while (driver.FindElement(By.ClassName("pn")).Displayed & pages != 0);   //search at most 3 pages in google and print to console the page numbers
+                } while (driver.FindElement(By.ClassName("pn")).Displayed & pages != 1);   //search at most 3 pages in google and print to console the page numbers
             }
             else if (nextpage == false) //if no results found
             {
-                Console.Write("Page ");              //print to console
-                Console.Write(pagenumber);              //print to console
-                Console.WriteLine(" has been displayed");              //print to console
+
+                DisplayPage(pagenumber);                
             }
-            Assert.IsTrue(ClassElementDisplayed("pn", driver), "ID results not found");   //test to verify 'next' button found
+            Assert.IsTrue(ClassElementDisplayed("g", driver), "Search results not found");   //test to verify 'next' button found
                 
         }
 
@@ -106,11 +102,18 @@ namespace Testing
             return foundid;
         }
 
-        public void GoNext(IWebDriver driver)           //method to tell Google to go to the next page of search elements
+        public void GoNext(IWebDriver driver, int pagenumber)           //method to tell Google to go to the next page of search elements
         {
             driver.FindElement(By.Id("pnnext")).Click();    //click the next button
+            DisplayPage(pagenumber);
             System.Threading.Thread.Sleep(5000);         //delay for 5000ms to visually verify page results; also to allow for page to load
         }
         
+        public void DisplayPage(int pagenumber)
+        {
+            Console.Write("Page ");              //print to console
+            Console.Write(pagenumber);              //print current page count to console
+            Console.WriteLine(" has been displayed");              //print to console
+        }
     }
 }
